@@ -46,6 +46,8 @@ end
 
 % --- Executes just before GUIpro is made visible.
 function GUIpro_OpeningFcn(hObject, eventdata, handles, varargin)
+handles.fileLoaded = 0;
+handles.fileLoaded2 = 0;
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -78,11 +80,18 @@ function Upload_Callback(hObject, eventdata, handles)
 % hObject    handle to Upload (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
- a=uigetfile('.jpg')
-       a=imread(a);
-       axes(handles.axes1);
-       imshow(a);
-       setappdata(0,'a',a)
+a = uigetfile('.jpg')
+a = imread(a);
+axes(handles.axes1);
+imshow(a);
+setappdata(0, 'a', a)
+handles.RGB = a;
+handles.RGB2 = a;
+handles.fileLoaded = 1;
+handles.fileLoaded2 = 0;
+handles = updateHistograms(handles);
+guidata(hObject, handles);
+       
 
 
 % --- Executes on button press in BinaryImage.
@@ -90,10 +99,11 @@ function BinaryImage_Callback(hObject, eventdata, handles)
 % hObject    handle to BinaryImage (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-a= getappdata(0,'a');
-abw=im2bw(a);
-axes(handles.axes1);
+a = getappdata(0, 'a');
+abw = im2bw(a);
+axes(handles.axes2);
 imshow(abw)
+
 
 % --- Executes on button press in Rgb2gray.
 function Rgb2gray_Callback(hObject, eventdata, handles)
@@ -183,11 +193,14 @@ function Complement_Callback(hObject, eventdata, handles)
 % hObject    handle to Complement (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-a= getappdata(0,'a');
-acomp=a;
-acomp=imcomplement(acomp);
-axes(handles.axes1);
+a = getappdata(0,'a');
+acomp = a;
+acomp = imcomplement(acomp);
+axes(handles.axes2);
 imshow(acomp);
+handles.fileLoaded2 = 1;
+handles.RGB2 = acomp;
+handles = updateHistograms(handles);
 
 % --- Executes on button press in pushbutton12.
 function pushbutton12_Callback(hObject, eventdata, handles)
@@ -246,3 +259,38 @@ function Sketchy_Callback(hObject, eventdata, handles)
 % hObject    handle to Sketchy (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+function handlesNew = updateHistograms(handles)
+handlesNew = handles;
+if (handles.fileLoaded == 1)
+%     set(handles.textHist1, 'Visible', 'on');
+    axes(handlesNew.axesHist1); 
+    cla;
+    ImageData1 = reshape(handlesNew.RGB(:,:,1), [size(handlesNew.RGB, 1) * size(handlesNew.RGB, 2) 1]);
+    ImageData2 = reshape(handlesNew.RGB(:,:,2), [size(handlesNew.RGB, 1) * size(handlesNew.RGB, 2) 1]);
+    ImageData3 = reshape(handlesNew.RGB(:,:,3), [size(handlesNew.RGB, 1) * size(handlesNew.RGB, 2) 1]);
+    [H1, X1] = hist(ImageData1, 1:5:256);
+    [H2, X2] = hist(ImageData2, 1:5:256);
+    [H3, X3] = hist(ImageData3, 1:5:256);
+    hold on;
+    plot(X1, H1, 'r');
+    plot(X2, H2, 'g');
+    plot(X3, H3, 'b');    
+    axis([0 256 0 max([H1 H2 H3])]);
+end
+if (handlesNew.fileLoaded2 == 1)
+    set(handles.textHist2, 'Visible', 'on');
+    axes(handlesNew.axesHist2); 
+    cla;
+    ImageData1 = reshape(handlesNew.RGB2(:,:,1), [size(handlesNew.RGB2, 1) * size(handlesNew.RGB2, 2) 1]);
+    ImageData2 = reshape(handlesNew.RGB2(:,:,2), [size(handlesNew.RGB2, 1) * size(handlesNew.RGB2, 2) 1]);
+    ImageData3 = reshape(handlesNew.RGB2(:,:,3), [size(handlesNew.RGB2, 1) * size(handlesNew.RGB2, 2) 1]);
+    [H1, X1] = hist(ImageData1, 1:5:256);
+    [H2, X2] = hist(ImageData2, 1:5:256);
+    [H3, X3] = hist(ImageData3, 1:5:256);
+    hold on;
+    plot(X1, H1, 'r');
+    plot(X2, H2, 'g');
+    plot(X3, H3, 'b');    
+    axis([0 256 0 max([H1 H2 H3])]);    
+end

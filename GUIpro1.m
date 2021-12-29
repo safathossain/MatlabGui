@@ -63,7 +63,7 @@ guidata(hObject, handles);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = GUIpro_OutputFcn(hObject, eventdata, handles) 
+function varargout = GUIpro_OutputFcn(hObject, eventdata, handles)
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -78,11 +78,11 @@ function Upload_Callback(hObject, eventdata, handles)
 % hObject    handle to Upload (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
- a=uigetfile('.jpg')
-       a=imread(a);
+ a = uigetfile('.jpg')
+       a = imread(a);
        axes(handles.axes1);
        imshow(a);
-       setappdata(0,'a',a)
+       setappdata(0, 'a', a)
 
 
 % --- Executes on button press in BinaryImage.
@@ -90,9 +90,9 @@ function BinaryImage_Callback(hObject, eventdata, handles)
 % hObject    handle to BinaryImage (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-a= getappdata(0,'a');
-abw=im2bw(a);
-axes(handles.axes1);
+a = getappdata(0, 'a');
+abw = im2bw(a);
+axes(handles.axes2);
 imshow(abw)
 
 % --- Executes on button press in Rgb2gray.
