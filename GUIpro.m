@@ -22,7 +22,7 @@ function varargout = GUIpro(varargin)
 
 % Edit the above text to modify the response to help GUIpro
 
-% Last Modified by GUIDE v2.5 28-Dec-2021 14:19:55
+% Last Modified by GUIDE v2.5 30-Dec-2021 12:52:36
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -116,6 +116,7 @@ axes(handles.axes1);
 imshow(agray);
 
 
+
 % --- Executes on button press in GrayAdjust.
 function GrayAdjust_Callback(hObject, eventdata, handles)
 % hObject    handle to GrayAdjust (see GCBO)
@@ -125,8 +126,10 @@ a= getappdata(0,'a');
 img=a;
 gray=rgb2gray(img);
 adj_img=imadjust(gray,[0.3,0.7,[]]);
-axes(handles.axes1);
+axes(handles.axes2);
 imshow(adj_img);
+
+
 
 % --- Executes on button press in RGBnoise.
 function RGBnoise_Callback(hObject, eventdata, handles)
@@ -294,3 +297,10 @@ if (handlesNew.fileLoaded2 == 1)
     plot(X3, H3, 'b');    
     axis([0 256 0 max([H1 H2 H3])]);    
 end
+
+
+% --- Executes on button press in Photocopy.
+function Photocopy_Callback(hObject, eventdata, handles)
+% hObject    handle to Photocopy (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
